@@ -2,13 +2,14 @@ import javax.swing.*;
 import java.awt.Color;
 import javax.swing.JFrame;
 
-import components.menu.bottemImgs;
-
 
 // class myFrame extends JFrame which makes it abel for me to use this keyWord instant of JFrame
 // JFrame frame = new JFrame() == myFrame extends JFrame
-;public class myMainFrame extends JFrame {
-    // constructor
+public class myMainFrame extends JFrame {
+    /***
+     * This is a starting Frame which containes the menu
+     * {constructor}
+     */
     public myMainFrame () {
 
         // using the Color class to create my own color
@@ -38,9 +39,9 @@ import components.menu.bottemImgs;
 
         // Sets the size of the frame (x-dimension & y-dimension)
         this.setSize(800, 600);
+
         // does add the Menu
-        
-        this.add(new MyMenu());
+        this.add(new myMenu(this));
         // Making the frame visible
         this.setVisible(true);
 
