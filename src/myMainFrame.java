@@ -43,7 +43,7 @@ public class myMainFrame extends JFrame {
         // does add the Menu
         this.add(new myMenu(this));
         // Making the frame visible
-        this.setVisible(true);
+        this.setVisible(false);
 
     }
 }
