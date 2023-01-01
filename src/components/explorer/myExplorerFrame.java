@@ -21,7 +21,7 @@ public class myExplorerFrame extends JFrame {
     JSplitPane splitPane = new JSplitPane();
     public myExplorerFrame () {
         // using the Color class to create my own color
-        Color myBackgroundColor = new Color(93, 137, 178);
+        //Color myBackgroundColor = new Color(93, 137, 178);
 
         // Puts a title to the frame
         this.setTitle("JFE");
@@ -76,7 +76,7 @@ public class myExplorerFrame extends JFrame {
         });
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(myBackgroundColor);
+        panel.setBackground(Color.WHITE);
         splitPane.setLeftComponent(new JScrollPane(list));
         splitPane.setDividerLocation(220);
         JScrollPane scrollPane = new JScrollPane(panel);
@@ -101,7 +101,7 @@ public class myExplorerFrame extends JFrame {
 
 
         // makes frame to the color of the variable myBackgroundColor
-        this.getContentPane().setBackground(myBackgroundColor);
+        this.getContentPane().setBackground(Color.WHITE);
 
         
 
