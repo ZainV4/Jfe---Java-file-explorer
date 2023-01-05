@@ -1,9 +1,8 @@
 package components.explorer;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -71,10 +70,10 @@ public class myExplorerFrame extends JFrame {
                 btn.setFocusPainted(false);
                 btn.setMaximumSize(new Dimension(1870, 50));
                 btn.setMinimumSize(new Dimension(1870, 50));
+                p.nextStep(btn, panel, p.toString());
                 panel.add(btn);
             }
         });
-
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.WHITE);
         splitPane.setLeftComponent(new JScrollPane(list));
@@ -131,4 +130,28 @@ class myDirectory {
         return file.toString();
     }
 
+    public void nextStep(JButton btn, JPanel panel, String p) {
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.removeAll();
+                panel.updateUI();
+                if(e.getSource() == btn) {
+                        String path = p+ "\\" + ((JButton) e.getSource()).getText();
+                        File directoryPath = new File(path);
+                        String contents[] = directoryPath.list();
+                        for(int i=0; i<contents.length; i++) {
+                            JButton btn =  new JButton(contents[i]);
+                            btn.setFocusPainted(false);
+                            btn.setMaximumSize(new Dimension(1870, 50));
+                            btn.setMinimumSize(new Dimension(1870, 50));
+                            nextStep(btn, panel, path);
+                            panel.add(btn);
+                        }
+                }
+            }
+        });
+    }
 }
+
+

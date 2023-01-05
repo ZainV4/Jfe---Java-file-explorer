@@ -28,6 +28,7 @@ public class navBar extends JMenuBar {
         btn2.setFocusPainted(false);
         btn3.setFocusPainted(false);
         btn4.setFocusPainted(false);
+        
         //
         
         this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
