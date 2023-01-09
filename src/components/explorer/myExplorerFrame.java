@@ -8,22 +8,29 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.awt.*;
 
-
+// class myFrame extends JFrame which makes it abel for me to use this keyWord instant of JFrame
+// JFrame frame = new JFrame() == myFrame extends JFrame
 public class myExplorerFrame extends JFrame {
-
+    // Jlist of the class myDirectory
     JList<myDirectory> list = new JList<>();
+    // Model for list (JList) / follows the MVC system
     DefaultListModel<myDirectory> model = new DefaultListModel<>();
+    // All drives (root directories)
     File[] drives = File.listRoots();
-
+    // Name of the directories or files
     JLabel label = new JLabel();
+    // panel which contains all the directories and files
     JPanel panel = new JPanel();
+    // JSplitPanel which splits root directories and children directories / files
     JSplitPane splitPane = new JSplitPane();
+    /*
+    * frame which shows the explorer
+    * {Constructor}
+    * status: not done
+    */
     public myExplorerFrame () {
-        // using the Color class to create my own color
-        //Color myBackgroundColor = new Color(93, 137, 178);
-
         // Puts a title to the frame
-        this.setTitle("JFE");
+        this.setTitle("Explorer");
 
         // Icon try and catch block
         try {
@@ -34,7 +41,8 @@ public class myExplorerFrame extends JFrame {
         } catch(Exception ex){
             System.out.println(ex);
         }
-
+        
+    
         // do nothing if user tries to exit
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -51,42 +59,69 @@ public class myExplorerFrame extends JFrame {
                 }
             }
         });
-        ///////////////////////////////////////////////////////////////////
+
+        // list gets the model added
         list.setModel(model);
+
+        // checks if there is any root directories
         if (drives != null && drives.length > 0) {
+            // loops the drives
             for (File aDrive : drives) {
+                // aDrive will be added to the model
                 model.addElement(new myDirectory(aDrive));
             }
+        } else {
+            new JLabel("no root directories");
         }
 
+        // it will update the files or directories if a change occurs if list model is selected
         list.getSelectionModel().addListSelectionListener(e -> {
+            // myDirectory will be equal to the selected dir / files
             myDirectory p = list.getSelectedValue();
+            // It will list all directories in p
             String contents[] = p.getFile().list();
-            label.setText("Name: " + p.getFile());
+            // reset the panel if p is selected
             panel.removeAll();
             panel.updateUI();
+            // loops content array
             for(int i=0; i<contents.length; i++) {
                 JButton btn =  new JButton(contents[i]);
                 btn.setFocusPainted(false);
                 btn.setMaximumSize(new Dimension(1870, 50));
                 btn.setMinimumSize(new Dimension(1870, 50));
-                p.nextStep(btn, panel, p.toString());
+                // calls openNextFile();
+                p.openNextFile(btn, panel, p.toString());
+                // btn will be added to the panel   
                 panel.add(btn);
             }
         });
+
+        // BoxLayout which does align everyting to the Y_Axis
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Color for background of the panel
         panel.setBackground(Color.WHITE);
+
+        // Roots dir to the left of the splitpanel
         splitPane.setLeftComponent(new JScrollPane(list));
+
+        // location of the divider
         splitPane.setDividerLocation(220);
+
+        // Jscrollpanel to panel
         JScrollPane scrollPane = new JScrollPane(panel);
+
+        // horizontal scroll bar only if needed 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        // Virtical scroll bar always
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBounds(50, 30, 300, 50);
+
+        // scrollPane to the right to splitPane
         splitPane.setRightComponent(scrollPane);
+
+        // add splitPane to the Explorer Frame
         this.add(splitPane);
-
-
-        //////////////////////////////////////////////////////
 
         // frame resizing is possible
         this.setResizable(true);
@@ -96,13 +131,14 @@ public class myExplorerFrame extends JFrame {
 
         // by opening the first time the frame it will be Extended
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setJMenuBar(new navBar());
 
+        // add navBar to the frame
+        navBar nb = new navBar();
+        
+        this.setJMenuBar(nb);
 
         // makes frame to the color of the variable myBackgroundColor
         this.getContentPane().setBackground(Color.WHITE);
-
-        
 
         // Making the frame visible
         this.setVisible(true);
@@ -111,16 +147,21 @@ public class myExplorerFrame extends JFrame {
 }
 class myDirectory {
     File file;
-    
-    public myDirectory(File file) {
-        this.file = file;
+    /***
+     * The file in the class is = to the parametter
+     * {constructor}
+     * @param path
+     */
+    public myDirectory(File path) {
+        this.file = path;
+
     }
 
-    // get
+    // Getter
     public File getFile() {
         return file;
     }
-    // set
+    // Setter
     public void setFile(File file) {
         this.file = file;
     }
@@ -130,24 +171,52 @@ class myDirectory {
         return file.toString();
     }
 
-    public void nextStep(JButton btn, JPanel panel, String p) {
+    /***
+     * Takes care of the onclick (ActionListener) procces
+     * @param btn
+     * @param panel
+     * @param p
+     */
+    public void openNextFile(JButton btn, JPanel panel, String p) {
+        Desktop desktop = Desktop.getDesktop();  
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // clear and update panel after click
                 panel.removeAll();
                 panel.updateUI();
+                // if the source (onclicked item) is btn
                 if(e.getSource() == btn) {
-                        String path = p+ "\\" + ((JButton) e.getSource()).getText();
-                        File directoryPath = new File(path);
+                    // The path
+                    String path = p+ "\\" + ((JButton) e.getSource()).getText();
+                    //  string ==> File
+                    File directoryPath = new File(path);
+                    if(directoryPath.isDirectory()) {
+                        // Array of all the children files
                         String contents[] = directoryPath.list();
+                        // looped the array contents
                         for(int i=0; i<contents.length; i++) {
                             JButton btn =  new JButton(contents[i]);
                             btn.setFocusPainted(false);
+                            // size of button
                             btn.setMaximumSize(new Dimension(1870, 50));
+                            // size of button
                             btn.setMinimumSize(new Dimension(1870, 50));
-                            nextStep(btn, panel, path);
+                            openNextFile(btn, panel, path);
+                            // add button to the panel
                             panel.add(btn);
                         }
+                    } else {
+                        if(Desktop.isDesktopSupported()) {
+                            try {
+                                desktop.open(directoryPath);
+                            } catch (Exception ex){
+                                System.out.println(ex);
+                            }
+                        } else {
+                            System.out.println("Desktop is not supported by this Platform");
+                        }
+                    }
                 }
             }
         });

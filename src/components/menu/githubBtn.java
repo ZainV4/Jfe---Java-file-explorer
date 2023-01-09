@@ -6,6 +6,8 @@ import java.awt.*;
 import java.net.URI;
 import java.net.URL;
 
+// class githubBtn extends JButton which makes it abel for me to use this keyWord instant of 
+// JButton button = new JButton() == githubBtn extends JButton
 public class githubBtn extends JButton {
     /***
      * Button which does send user to the github website
@@ -15,7 +17,7 @@ public class githubBtn extends JButton {
         // Button text
         this.setText("<html><h3>Github</h3></html>");
         // Background color 
-        this.setBackground(Color.black.brighter());
+        this.setBackground(Color.BLACK.brighter());
         // Text color
         this.setForeground(Color.LIGHT_GRAY.brighter());
         // Size of button

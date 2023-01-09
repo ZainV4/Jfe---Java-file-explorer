@@ -3,8 +3,8 @@ import java.awt.Color;
 import javax.swing.JFrame;
 
 
-// class myFrame extends JFrame which makes it abel for me to use this keyWord instant of JFrame
-// JFrame frame = new JFrame() == myFrame extends JFrame
+// class myMainFrame extends JFrame which makes it abel for me to use this keyWord instant of JFrame
+// JFrame myMainFrame = new JFrame() == myMainFrame extends JFrame
 public class myMainFrame extends JFrame {
     /***
      * This is a starting Frame which containes the menu

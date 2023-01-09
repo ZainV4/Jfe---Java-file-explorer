@@ -2,6 +2,8 @@ package components.menu;
 import javax.swing.*;
 import java.awt.*;
 
+// class exitBtn extends JButton which makes it abel for me to use this keyWord instant of 
+// JButton button = new JButton() == exitBtn extends JButton
 public class exitBtn extends JButton {
     /***
      * Button which exits the application

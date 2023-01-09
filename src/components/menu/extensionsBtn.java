@@ -2,6 +2,8 @@ package components.menu;
 import javax.swing.*;
 import java.awt.*;
 
+// class extensionsBtn extends JButton which makes it abel for me to use this keyWord instant of 
+// JButton button = new JButton() == extensionsBtn extends JButton
 public class extensionsBtn extends JButton{
     /***
      *  Button which makes extension frame visible

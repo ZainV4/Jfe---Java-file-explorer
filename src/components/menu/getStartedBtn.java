@@ -2,6 +2,8 @@ package components.menu;
 import javax.swing.*;
 import java.awt.*;
 
+// class getStartedBtn extends JButton which makes it abel for me to use this keyWord instant of 
+// JButton button = new JButton() == getStartedBtn extends JButton
 public class getStartedBtn extends JButton {
     /***
      * Button which does make the Jfe visible

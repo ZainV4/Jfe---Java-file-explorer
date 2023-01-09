@@ -1,46 +1,71 @@
 package components.explorer;
-import java.awt.TextComponent;
-import java.awt.Dimension;
 import java.awt.ComponentOrientation;
 import java.awt.*;
-
 import javax.swing.*;  
 
+// class navBar extends JMenuBar which makes it abel for me to use this keyWord instant of 
+// JMenuBar navbar = new JMenuBar() == navbar extends JMenuBar
 public class navBar extends JMenuBar {
+    String path;
     /*
-     * this function will display a navigation bar on top of the Explorer frame
+     * This function will display a navigation bar on top of the Explorer frame
      * {Constructor}
      * status: not done
      */
     public navBar() {
+        ImageIcon leftArrowIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-arrow-left-alt-filled-16.png");
+        ImageIcon rightArrowIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-arrow-right-alt-filled-16.png");
+        ImageIcon searchIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-folder-29-16.png");
+        ImageIcon sortIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-sort-27-16.png");
+        ImageIcon CreateIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-text-28-16.png");
+
+        // Input for searchBar
         JTextField t1 = new JTextField();
+
+        // Title text for t1
         JLabel label = new JLabel("   Path finder:   ");
+
+        // Font and size  for the label
         Font font = new Font("Verdana", Font.PLAIN,17);
+
+        // Adds font to the label
         label.setFont(font);
-        JButton btn = new JButton("Click me");
-        JButton btn1 = new JButton("Click me");
-        JButton btn2 = new JButton("Click me");
-        JButton btn3 = new JButton("Click me");
-        JButton btn4 = new JButton("Click me");
-        //
-        btn.setFocusPainted(false);
-        btn1.setFocusPainted(false);
-        btn2.setFocusPainted(false);
-        btn3.setFocusPainted(false);
-        btn4.setFocusPainted(false);
+
+        // Random buttons
+        JButton SearchBtn = new JButton(searchIcon);
+
+        JButton OnePathToBackBtn = new JButton(leftArrowIcon);
+        JButton OnePathTofontBtn = new JButton(rightArrowIcon);
+        JButton sortBtn = new JButton(sortIcon);
+        JButton CreateBtn = new JButton(CreateIcon);
+
+
+        // Sets FocusPainted to false
+        SearchBtn.setFocusPainted(false);
+        OnePathToBackBtn.setFocusPainted(false);
+        OnePathTofontBtn.setFocusPainted(false);
+        sortBtn.setFocusPainted(false);
+        CreateBtn.setFocusPainted(false);
         
-        //
-        
+        // Alignes the text from left to right
         this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        this.add(Box.createHorizontalGlue());
-        // add menu to menu bar
-        this.add(btn4);
+
+        // add items to menu bar
+        this.add(SearchBtn);
         this.add(label);
         this.add(t1);
-        this.add(btn);
-        this.add(btn1);
-        this.add(btn2);
-        this.add(btn3);
-        
+        this.add(OnePathToBackBtn);
+        this.add(OnePathTofontBtn);
+        this.add(sortBtn);
+        this.add(CreateBtn);
     }
+/* 
+    public void searchByClick(JButton btn,  String path) {
+        btn.addActionListener(e -> {
+            myDirectory p = new myDirectory(null);
+            myExplorerFrame ef = new myExplorerFrame();
+            p.openNextFile(btn, ef.panel, path);
+        });
+    }
+    */
 }

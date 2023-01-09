@@ -9,6 +9,9 @@ import java.awt.image.*;
 import java.io.*;
 import javax.swing.*;
 
+
+// class bottemImgs extends JButton which makes it abel for me to use this keyWord instant of 
+// JButton button = new JButton() == bottemImags extends JButton
 public class bottemImgs extends JPanel {
     public bottemImgs() {
         // try & catch block for error handling
