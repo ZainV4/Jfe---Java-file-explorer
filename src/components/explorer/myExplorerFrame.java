@@ -20,9 +20,11 @@ public class myExplorerFrame extends JFrame {
     // Name of the directories or files
     JLabel label = new JLabel();
     // panel which contains all the directories and files
-    JPanel panel = new JPanel();
+    static JPanel panel = new JPanel();
     // JSplitPanel which splits root directories and children directories / files
     JSplitPane splitPane = new JSplitPane();
+
+    ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
     /*
     * frame which shows the explorer
     * {Constructor}
@@ -89,6 +91,9 @@ public class myExplorerFrame extends JFrame {
                 btn.setFocusPainted(false);
                 btn.setMaximumSize(new Dimension(1870, 50));
                 btn.setMinimumSize(new Dimension(1870, 50));
+                btn.setIcon(dirIcon);
+                btn.setHorizontalAlignment(SwingConstants.LEFT);
+                btn.setFont(new Font("Arial", Font.PLAIN, 25));
                 // calls openNextFile();
                 p.openNextFile(btn, panel, p.toString());
                 // btn will be added to the panel   
@@ -123,14 +128,14 @@ public class myExplorerFrame extends JFrame {
         // add splitPane to the Explorer Frame
         this.add(splitPane);
 
-        // frame resizing is possible
-        this.setResizable(true);
+        // frame resizing is not possible anymore
+        this.setResizable(false);
 
         // Sets the size of the frame (x-dimension & y-dimension)
-        this.setSize(1000, 1000);
+        this.setSize(900, 700);
 
         // by opening the first time the frame it will be Extended
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // add navBar to the frame
         navBar nb = new navBar();
@@ -145,7 +150,7 @@ public class myExplorerFrame extends JFrame {
     }
 
 }
-class myDirectory {
+class  myDirectory {
     File file;
     /***
      * The file in the class is = to the parametter
@@ -177,7 +182,8 @@ class myDirectory {
      * @param panel
      * @param p
      */
-    public void openNextFile(JButton btn, JPanel panel, String p) {
+    public static void openNextFile(JButton btn, JPanel panel, String p) {
+        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
         Desktop desktop = Desktop.getDesktop();  
         btn.addActionListener(new ActionListener() {
             @Override
@@ -196,7 +202,12 @@ class myDirectory {
                         String contents[] = directoryPath.list();
                         // looped the array contents
                         for(int i=0; i<contents.length; i++) {
+
                             JButton btn =  new JButton(contents[i]);
+                            btn.setIcon(dirIcon);
+                            btn.setHorizontalAlignment(SwingConstants.LEFT);
+                            btn.setFont(new Font("Arial", Font.PLAIN, 25));
+
                             btn.setFocusPainted(false);
                             // size of button
                             btn.setMaximumSize(new Dimension(1870, 50));
@@ -220,6 +231,32 @@ class myDirectory {
                 }
             }
         });
+    }
+    public static void searchBarFunction(String path, JPanel panel) {
+        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+        
+        // myDirectory will be equal to the selected dir / files
+        File dir = new File(path);
+        // It will list all directories in p
+        String contents[] = dir.list();
+        // reset the panel if p is selected
+        panel.removeAll();
+        panel.updateUI();
+        // loops content array
+        for(int i=0; i<contents.length; i++) {
+            JButton btn =  new JButton(contents[i]);
+            btn.setFocusPainted(false);
+            btn.setMaximumSize(new Dimension(1870, 50));
+            btn.setMinimumSize(new Dimension(1870, 50));
+            btn.setIcon(dirIcon);
+            btn.setHorizontalAlignment(SwingConstants.LEFT);
+            btn.setFont(new Font("Arial", Font.PLAIN, 25));
+            // calls openNextFile();
+            openNextFile(btn, panel, path);
+            // btn will be added to the panel   
+            panel.add(btn);
+
+        }
     }
 }
 

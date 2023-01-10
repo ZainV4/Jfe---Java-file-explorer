@@ -13,11 +13,11 @@ public class navBar extends JMenuBar {
      * status: not done
      */
     public navBar() {
-        ImageIcon leftArrowIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-arrow-left-alt-filled-16.png");
-        ImageIcon rightArrowIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-arrow-right-alt-filled-16.png");
-        ImageIcon searchIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-folder-29-16.png");
-        ImageIcon sortIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-sort-27-16.png");
-        ImageIcon CreateIcon = new ImageIcon("Img\\ExplorerIcons\\iconmonstr-text-28-16.png");
+        ImageIcon leftArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-left-alt-filled-16.png");
+        ImageIcon rightArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-right-alt-filled-16.png");
+        ImageIcon searchIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-folder-29-16.png");
+        ImageIcon sortIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-sort-27-16.png");
+        ImageIcon CreateIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-text-28-16.png");
 
         // Input for searchBar
         JTextField t1 = new JTextField();
@@ -33,7 +33,12 @@ public class navBar extends JMenuBar {
 
         // Random buttons
         JButton SearchBtn = new JButton(searchIcon);
-
+        SearchBtn.addActionListener(e -> {
+            //setPath(t1.getText());
+            myDirectory.searchBarFunction(t1.getText(), myExplorerFrame.panel);
+        });
+        
+        
         JButton OnePathToBackBtn = new JButton(leftArrowIcon);
         JButton OnePathTofontBtn = new JButton(rightArrowIcon);
         JButton sortBtn = new JButton(sortIcon);
@@ -59,13 +64,14 @@ public class navBar extends JMenuBar {
         this.add(sortBtn);
         this.add(CreateBtn);
     }
-/* 
-    public void searchByClick(JButton btn,  String path) {
-        btn.addActionListener(e -> {
-            myDirectory p = new myDirectory(null);
-            myExplorerFrame ef = new myExplorerFrame();
-            p.openNextFile(btn, ef.panel, path);
-        });
+
+    // Setter
+    public void setPath(String path) {
+        this.path = path;
     }
-    */
+
+    //getter
+    public String getPath() {
+        return path;
+    }
 }
