@@ -6,13 +6,18 @@ import javax.swing.*;
 // class navBar extends JMenuBar which makes it abel for me to use this keyWord instant of 
 // JMenuBar navbar = new JMenuBar() == navbar extends JMenuBar
 public class navBar extends JMenuBar {
-    String path;
+    static JButton SearchBtn;
+    static JButton OnePathToBackBtn;
+    static JButton OnePathToFontBtn;
+    static JButton sortBtn;
+    static JButton CreateBtn;
     /*
      * This function will display a navigation bar on top of the Explorer frame
      * {Constructor}
      * status: not done
      */
     public navBar() {
+        // icons for main functions
         ImageIcon leftArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-left-alt-filled-16.png");
         ImageIcon rightArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-right-alt-filled-16.png");
         ImageIcon searchIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-folder-29-16.png");
@@ -31,24 +36,35 @@ public class navBar extends JMenuBar {
         // Adds font to the label
         label.setFont(font);
 
-        // Random buttons
-        JButton SearchBtn = new JButton(searchIcon);
+        // main buttons with icons
+        SearchBtn = new JButton(searchIcon);        
+        OnePathToBackBtn = new JButton(leftArrowIcon);
+        OnePathToFontBtn = new JButton(rightArrowIcon);
+        sortBtn = new JButton(sortIcon);
+        CreateBtn = new JButton(CreateIcon);
+
+        // Search bar and Search btn (ActionListener)
         SearchBtn.addActionListener(e -> {
-            //setPath(t1.getText());
             myDirectory.searchBarFunction(t1.getText(), myExplorerFrame.panel);
+            OnePathToFontBtn.setEnabled(false);
+            OnePathToBackBtn.setEnabled(false);
         });
-        
-        
-        JButton OnePathToBackBtn = new JButton(leftArrowIcon);
-        JButton OnePathTofontBtn = new JButton(rightArrowIcon);
-        JButton sortBtn = new JButton(sortIcon);
-        JButton CreateBtn = new JButton(CreateIcon);
+
+        // One path back btn (ActionListener)
+        OnePathToBackBtn.addActionListener(e -> {
+            myDirectory.OnePathToBackBtnFuntion(myExplorerFrame.panel, myDirectory.openNextPath);
+        });
+
+        // NOT COMPLETE (ActionListener)
+        OnePathToFontBtn.addActionListener(e -> {
+            //myDirectory.OnePathToFrontBtnFuntion(myExplorerFrame.panel, myDirectory.pathLol);
+        });
 
 
         // Sets FocusPainted to false
         SearchBtn.setFocusPainted(false);
         OnePathToBackBtn.setFocusPainted(false);
-        OnePathTofontBtn.setFocusPainted(false);
+        OnePathToFontBtn.setFocusPainted(false);
         sortBtn.setFocusPainted(false);
         CreateBtn.setFocusPainted(false);
         
@@ -60,18 +76,8 @@ public class navBar extends JMenuBar {
         this.add(label);
         this.add(t1);
         this.add(OnePathToBackBtn);
-        this.add(OnePathTofontBtn);
+        this.add(OnePathToFontBtn);
         this.add(sortBtn);
         this.add(CreateBtn);
-    }
-
-    // Setter
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    //getter
-    public String getPath() {
-        return path;
     }
 }
