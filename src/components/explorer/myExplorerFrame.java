@@ -80,6 +80,7 @@ public class myExplorerFrame extends JFrame {
         list.getSelectionModel().addListSelectionListener(e -> {
             // myDirectory will be equal to the selected dir / files
             myDirectory p = list.getSelectedValue();
+            myDirectory.openNextPath = p.toString();
             // It will list all directories in p
             String contents[] = p.getFile().list();
             // reset the panel if p is selected
@@ -200,8 +201,8 @@ class  myDirectory {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Enables back and font btns if panel btn is clicked
-                navBar.OnePathToFontBtn.setEnabled(true);
-                navBar.OnePathToBackBtn.setEnabled(true);
+                navBar.onePathBackwardBtn.setEnabled(true);
+                navBar.onePathForwardtBtn.setEnabled(true);
                 // clear and update panel after click
                 panel.removeAll();
                 panel.updateUI();
@@ -262,8 +263,10 @@ class  myDirectory {
         
         // myDirectory will be equal to the selected dir / files
         try {
+            // onlick on btn update openNextPath
+            openNextPath = path;
             // String ==> File
-            File dir = new File(path);
+            File dir = new File(openNextPath);
             // It will list all directories in p
             String contents[] = dir.list();
             // reset the panel if p is selected
@@ -308,8 +311,10 @@ class  myDirectory {
         ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
 
         try {
+            // onlick on btn update openNextPath
+            openNextPath = path;
             //StringBuffer (basiclly String which can be modified)
-            StringBuffer sb= new StringBuffer(pathLol);  
+            StringBuffer sb= new StringBuffer(openNextPath);  
             // loop with does go less(path.length) by 1 each run
             for(int i = path.length()-1; i>0; i--) {
                 // checks if path is really a Directory
@@ -327,11 +332,11 @@ class  myDirectory {
                         }
                     } else {
                         // disables btn if path length is less then or three
-                        navBar.OnePathToBackBtn.setEnabled(false);
+                        navBar.onePathBackwardBtn.setEnabled(false);
                     }
                 } else {
                     // disables btn if path does not exist
-                    navBar.OnePathToBackBtn.setEnabled(false);
+                    navBar.onePathForwardtBtn.setEnabled(false);
                     break;
                 }
             }
@@ -366,10 +371,10 @@ class  myDirectory {
             }
         }catch(Exception e) {
             // disables back-btn if path does not exist
-            navBar.OnePathToBackBtn.setEnabled(false);
+            navBar.onePathBackwardBtn.setEnabled(false);
             JFrame frame = new JFrame();
             // write your code here
-            JOptionPane.showMessageDialog( frame, "Hmm... I don't think this path exist", 
+            JOptionPane.showMessageDialog( frame, e, 
             "Do you understand?", JOptionPane.OK_OPTION);
 
         }

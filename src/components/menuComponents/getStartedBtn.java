@@ -1,5 +1,8 @@
-package components.menu;
+package components.menuComponents;
 import javax.swing.*;
+
+import components.explorer.myExplorerFrame;
+
 import java.awt.*;
 
 // class getStartedBtn extends JButton which makes it abel for me to use this keyWord instant of 
@@ -9,7 +12,7 @@ public class getStartedBtn extends JButton {
      * Button which does make the Jfe visible
      * {Constructor}
      */
-    public getStartedBtn () {
+    public getStartedBtn (JFrame frame) {
         // Button text
         this.setText("<html><h2>Get Started</h2></html>");
         // Background color 
@@ -20,5 +23,10 @@ public class getStartedBtn extends JButton {
         this.setPreferredSize(new Dimension(170, 50));
         // removes white box around the text
         this.setFocusPainted(false);
+
+        this.addActionListener(e -> {
+            frame.dispose();
+            new myExplorerFrame();
+        });
     }
 }

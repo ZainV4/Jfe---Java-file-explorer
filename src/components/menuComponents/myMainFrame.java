@@ -1,3 +1,4 @@
+package components.menuComponents;
 import javax.swing.*;
 import java.awt.Color;
 import javax.swing.JFrame;
@@ -7,9 +8,11 @@ import javax.swing.JFrame;
 // JFrame myMainFrame = new JFrame() == myMainFrame extends JFrame
 public class myMainFrame extends JFrame {
     /***
+     *
      * This is a starting Frame which containes the menu
      * {constructor}
      */
+    static boolean isOpen = true;
     public myMainFrame () {
 
         // using the Color class to create my own color
@@ -43,7 +46,8 @@ public class myMainFrame extends JFrame {
         // does add the Menu
         this.add(new myMenu(this));
         // Making the frame visible
-        this.setVisible(true);
+        this.setVisible(isOpen);
 
     }
+
 }
