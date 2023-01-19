@@ -7,6 +7,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import components.menuComponents.buttons.bottemImgs;
+import components.menuComponents.buttons.exitBtn;
+import components.menuComponents.buttons.getStartedBtn;
+import components.menuComponents.buttons.githubBtn;
+
 import java.awt.Color;
 
 // class myMenu extends JPanel which makes it abel for me to use this keyWord instant of 
