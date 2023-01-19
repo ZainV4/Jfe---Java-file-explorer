@@ -27,7 +27,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-### Real Menu ###
-menuComponents/
-extension/
