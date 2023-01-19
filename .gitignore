@@ -29,5 +29,5 @@ bin/
 .DS_Store
 
 ### Real Menu ###
-src/components/extension/
-src/components/menuComponents/
+src/menuComponents
+src/extension
