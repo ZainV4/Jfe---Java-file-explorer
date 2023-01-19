@@ -5,7 +5,12 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;  
-
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import java.awt.FlowLayout;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 // class navBar extends JMenuBar which makes it abel for me to use this keyWord instant of 
 // JMenuBar navbar = new JMenuBar() == navbar extends JMenuBar
 public class navBar extends JMenuBar {
@@ -15,7 +20,7 @@ public class navBar extends JMenuBar {
     static JButton sortBtn;
     static JButton createBtn;
     static JButton updatePanelBtn;
-    Boolean isFolder;
+    Boolean isFolder = true;
     /*
      * This function will display a navigation bar on top of the Explorer frame
      * {Constructor}
@@ -172,13 +177,14 @@ public class navBar extends JMenuBar {
 
         // option box with {Folder, File}
         JComboBox<String> optionsBox = new JComboBox<String>(Options);
-        String getItem = (String)optionsBox.getSelectedItem();
-        
-        if(getItem.equals(Options[0])) {
-            isFolder = true;
-        } else {
-            isFolder = false;
-        }
+
+        optionsBox.addActionListener(event -> {
+            if (optionsBox.getSelectedItem().equals("Folder")) {
+                isFolder = true;
+            } else if (optionsBox.getSelectedItem().equals("File")) {
+                isFolder = false;
+            }
+        });
         optionsBox.setFont(new Font("Anton", Font.BOLD, 20));
 
         // panel with contains create and cancel buttens
@@ -189,36 +195,52 @@ public class navBar extends JMenuBar {
         createBtn.addActionListener(e -> {
             if(isFolder == true) {
                 try {
-                    File myObj = new File(newDirectoryField.getText());
-                    if (myObj.mkdir()) {
-                    System.out.println("File created: " + myObj.getName());
+                    File myObj = new File(myDirectory.openNextPath+"\\"+newDirectoryField.getText());
+                    if (myObj.mkdir() && myObj != null) {
+                        // frame for dialog
+                        JFrame create = new JFrame();
+                        // dialog which tells the user that the path, he/she is trying to open does not exist
+                        JOptionPane.showMessageDialog(create,"Folder create: "+ myObj.getName(),"Folder dialog" , JOptionPane.OK_OPTION);
                     } else {
-                    System.out.println("File already exists.");
+                        // frame for dialog
+                        JFrame create = new JFrame();
+                        // dialog which tells the user that the path, he/she is trying to open does exist
+                        JOptionPane.showMessageDialog(create,"Folder already exists "+ myObj.getName(),"Folder dialog" , JOptionPane.OK_OPTION);
                     }
                 } catch (Exception ex) {
                     // frame for dialog
                     JFrame dialog = new JFrame();
-                    // dialog which tells the user that the path, he/she is trying to open does not exist
-                    JOptionPane.showMessageDialog(dialog, e, "Do you understand?", JOptionPane.OK_OPTION);
+                    // dialog which tells the error
+                    JOptionPane.showMessageDialog(dialog, "Do you understand?", "Folder dialog", JOptionPane.OK_OPTION);
                 }
-            } else {
+            } else if (isFolder == false) {
                 try {
-                    File myObj = new File(newDirectoryField.getText());
-
+                    File myObj = new File(myDirectory.openNextPath+"\\"+newDirectoryField.getText());
                     if (myObj.createNewFile()) {
-                    System.out.println("Folder created: " + myObj.getName());
+                        // frame for dialog
+                        JFrame dialog = new JFrame();
+                        // dialog which tells the error
+                        JOptionPane.showMessageDialog(dialog, "File create: "+ myObj.getName(), "Folder dialog", JOptionPane.OK_OPTION);
                     } else {
-                    System.out.println("Folder already exists.");
+                        // frame for dialog
+                        JFrame dialog = new JFrame();
+                        // dialog which tells the error
+                        JOptionPane.showMessageDialog(dialog, "Folder already exists: "+ myObj.getName(), "Folder dialog", JOptionPane.OK_OPTION);
                     }
                 } catch (Exception ex) {
                     // frame for dialog
                     JFrame dialog = new JFrame();
-                    // dialog which tells the user that the path, he/she is trying to open does not exist
-                    JOptionPane.showMessageDialog(dialog, e, "Do you understand?", JOptionPane.OK_OPTION);
+                    // dialog which tells the error
+                    JOptionPane.showMessageDialog(dialog, "Do you understand?", "Folder dialog", JOptionPane.OK_OPTION);
+
                 }
             }
-            });
+            frame.dispose();
+        });
         JButton cancelBtn = new JButton("CANCEL");
+        cancelBtn.addActionListener(e -> {
+            frame.dispose();
+        });
         cancelBtn.setFont(new Font("Anton", Font.BOLD, 17));
 
         // remove Paint focus around the button
