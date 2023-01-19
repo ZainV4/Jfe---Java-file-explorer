@@ -1,5 +1,6 @@
 package components.explorer;
 import java.awt.ComponentOrientation;
+import java.io.File;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,6 +15,7 @@ public class navBar extends JMenuBar {
     static JButton sortBtn;
     static JButton createBtn;
     static JButton updatePanelBtn;
+    Boolean isFolder;
     /*
      * This function will display a navigation bar on top of the Explorer frame
      * {Constructor}
@@ -40,7 +42,7 @@ public class navBar extends JMenuBar {
         // Adds font to the label
         label.setFont(font);
 
-        // main buttons with icons
+        // main buttons with icons & ToolTip
         searchBtn = new JButton(searchIcon);  
         searchBtn.setToolTipText("start the search function");  
             
@@ -58,6 +60,8 @@ public class navBar extends JMenuBar {
 
         updatePanelBtn = new JButton(updatePanelIcon);
         updatePanelBtn.setToolTipText("updates the panel which shows the content of directory");
+
+
         // Search bar and Search btn (ActionListener)
         searchBtn.addActionListener(e -> {
             myDirectory.searchBarFunction(t1.getText(), myExplorerFrame.panel);
@@ -105,43 +109,115 @@ public class navBar extends JMenuBar {
         this.add(createBtn);
         this.add(updatePanelBtn);
     }
+
+    /***
+     * Creates Files and folders inside 
+     * 
+     */
     public void createFunction() {
+        // array of Strings for JComboBox 
         String[] Options = { "Folder", "File" };
 
+        // frame which contains function
         JFrame frame = new JFrame("The Creating Window");  
-        JPanel panel = new JPanel();
+        // main panel
+        JPanel CreatePanel = new JPanel();
         // give the panel a BoxLayout
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        // Contains the Address where the object is going to be created
+        CreatePanel.setLayout(new BoxLayout(CreatePanel, BoxLayout.Y_AXIS));
+
+        // title for path holder
         JLabel sourceFieldContext = new JLabel("{Path}");
+        // sets font & size for the path title(sourceFieldContext)
         sourceFieldContext.setFont(new Font("Anton", Font.BOLD, 20));
+        // alignment path holder(sourceFieldContext) to center
         sourceFieldContext.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+
+        // path holder conatains selected path
         JTextField sourceAddressField = new JTextField(myDirectory.openNextPath);
+        // set background color
         sourceAddressField.setBackground(Color.WHITE);
+        // set to not Editable
         sourceAddressField.setEditable(false);
+        // set border & set border to black and make the thinkness to 2
         sourceAddressField.setBorder(new LineBorder(Color.BLACK, 2));
+        // center object
         sourceAddressField.setHorizontalAlignment(JTextField.CENTER);
+        // sets font & size for sourceAddressField
         sourceAddressField.setFont(new Font("Anton", Font.BOLD, 20));
-        
 
-        // Contains name of the new created object 
-        JLabel nothing = new JLabel(" ");
-        JTextField newDirectoryField = new JTextField();
-        newDirectoryField.setBorder(new LineBorder(Color.BLACK, 2));
-        newDirectoryField.setFont(new Font("Anton", Font.BOLD, 20));
-        
+        // creates scrollBar
         JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+        // Create  model for sourceAddressField
         BoundedRangeModel brm = sourceAddressField.getHorizontalVisibility();
-
+        
+        // place holder
         JLabel nothing2 = new JLabel(" ");
+        // sets font & size for place holder
         nothing2.setFont(new Font("Anton", Font.BOLD, 17));
+        // hintText for newDirectoryField
         JLabel hintText = new JLabel("Choose a new name");
+        // center hintText
         hintText.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+
+
+        // place holder
+        JLabel nothing = new JLabel(" ");
+        // user input new name of path
+        JTextField newDirectoryField = new JTextField();
+        // set border & set border to black and make the thinkness to 2
+        newDirectoryField.setBorder(new LineBorder(Color.BLACK, 2));
+        // sets font & size for sourceAddressField
+        newDirectoryField.setFont(new Font("Anton", Font.BOLD, 20));
+
+
+        // option box with {Folder, File}
+        JComboBox<String> optionsBox = new JComboBox<String>(Options);
+        String getItem = (String)optionsBox.getSelectedItem();
+        
+        if(getItem.equals(Options[0])) {
+            isFolder = true;
+        } else {
+            isFolder = false;
+        }
+        optionsBox.setFont(new Font("Anton", Font.BOLD, 20));
+
         // panel with contains create and cancel buttens
         JPanel buttons = new JPanel(new GridBagLayout());
-        // Cancel & Create button
+        // Cancel & Create button [and font & 17]
         JButton createBtn = new JButton("CREATE");
         createBtn.setFont(new Font("Anton", Font.BOLD, 17));
+        createBtn.addActionListener(e -> {
+            if(isFolder == true) {
+                try {
+                    File myObj = new File(newDirectoryField.getText());
+                    if (myObj.mkdir()) {
+                    System.out.println("File created: " + myObj.getName());
+                    } else {
+                    System.out.println("File already exists.");
+                    }
+                } catch (Exception ex) {
+                    // frame for dialog
+                    JFrame dialog = new JFrame();
+                    // dialog which tells the user that the path, he/she is trying to open does not exist
+                    JOptionPane.showMessageDialog(dialog, e, "Do you understand?", JOptionPane.OK_OPTION);
+                }
+            } else {
+                try {
+                    File myObj = new File(newDirectoryField.getText());
+
+                    if (myObj.createNewFile()) {
+                    System.out.println("Folder created: " + myObj.getName());
+                    } else {
+                    System.out.println("Folder already exists.");
+                    }
+                } catch (Exception ex) {
+                    // frame for dialog
+                    JFrame dialog = new JFrame();
+                    // dialog which tells the user that the path, he/she is trying to open does not exist
+                    JOptionPane.showMessageDialog(dialog, e, "Do you understand?", JOptionPane.OK_OPTION);
+                }
+            }
+            });
         JButton cancelBtn = new JButton("CANCEL");
         cancelBtn.setFont(new Font("Anton", Font.BOLD, 17));
 
@@ -153,29 +229,25 @@ public class navBar extends JMenuBar {
         buttons.add(createBtn);
         buttons.add(cancelBtn);
 
-        // option box with {Folder, File}
-        JComboBox optionsBox = new JComboBox(Options);
-        optionsBox.setFont(new Font("Anton", Font.BOLD, 20));
 
-
-        panel.setBorder(BorderFactory.createTitledBorder("Let's Create"));
+        CreatePanel.setBorder(BorderFactory.createTitledBorder("Let's Create"));
 
         
         // adding everything togther
         scrollBar.setModel(brm);
-        panel.add(sourceFieldContext);
-        panel.add(nothing2);
-        panel.add(sourceAddressField);
-        panel.add(scrollBar);
-        panel.add(nothing);
-        panel.add(hintText);
-        panel.add(newDirectoryField);
-        panel.add(optionsBox);
-        panel.add(buttons);
+        CreatePanel.add(sourceFieldContext);
+        CreatePanel.add(nothing2);
+        CreatePanel.add(sourceAddressField);
+        CreatePanel.add(scrollBar);
+        CreatePanel.add(nothing);
+        CreatePanel.add(hintText);
+        CreatePanel.add(newDirectoryField);
+        CreatePanel.add(optionsBox);
+        CreatePanel.add(buttons);
 
         // frame resizing is not possible anymore
         frame.setResizable(false);
-        frame.add(panel, BorderLayout.NORTH);
+        frame.add(CreatePanel, BorderLayout.NORTH);
         frame.setSize(500, 300);  
         frame.setLocationRelativeTo(null);  
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
