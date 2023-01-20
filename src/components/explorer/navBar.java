@@ -1,6 +1,9 @@
 package components.explorer;
 import java.awt.ComponentOrientation;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -88,6 +91,11 @@ public class navBar extends JMenuBar {
             createFunction();;
         });
 
+        sortBtn.addActionListener(e -> {
+            sortFunction();
+
+        });
+
         updatePanelBtn.addActionListener(e -> {
             myExplorerFrame.panel.removeAll();
             myExplorerFrame.panel.updateUI();
@@ -155,8 +163,45 @@ public class navBar extends JMenuBar {
     }
 
     /***
-     * Creates Files and folders inside 
+     * sorts string array in alphabetical order or ascending order
      * 
+     */
+    public void sortFunction() {
+        // clears and updates panel
+        myExplorerFrame.panel.removeAll();
+        myExplorerFrame.panel.updateUI();
+        // icon for buttons
+        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+        // String ==> File
+        File dir = new File(myDirectory.openNextPath);
+        // It will list all directories in p
+        String contents[] = dir.list();
+        // reset the panel if p is selected
+        myExplorerFrame.panel.removeAll();
+        myExplorerFrame.panel.updateUI();
+        // loops content array
+        for(int i=0; i<contents.length; i++) {
+            // sets btn name content
+            JButton btn =  new JButton(contents[i]);
+            // sets icon 
+            btn.setIcon(dirIcon);
+            // align btn text to the left
+            btn.setHorizontalAlignment(SwingConstants.LEFT);
+            // sets font
+            btn.setFont(new Font("Arial", Font.PLAIN, 25));
+            // removes focus 
+            btn.setFocusPainted(false);
+            // size of button
+            btn.setMaximumSize(new Dimension(1870, 50));
+            // size of button
+            btn.setMinimumSize(new Dimension(1870, 50));
+            myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+            // add button to the panel
+            myExplorerFrame.panel.add(btn);
+        }
+    }
+    /***
+     * opens a frame which creates folders or files 
      */
     public void createFunction() {
         // array of Strings for JComboBox 
