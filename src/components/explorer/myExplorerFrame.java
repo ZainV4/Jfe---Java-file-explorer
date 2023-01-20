@@ -266,7 +266,7 @@ class  myDirectory {
             // onlick on btn update openNextPath
             openNextPath = path;
             // String ==> File
-            File dir = new File(openNextPath);
+            File dir = new File(path);
             // It will list all directories in p
             String contents[] = dir.list();
             // reset the panel if p is selected
@@ -288,7 +288,7 @@ class  myDirectory {
                 btn.setMaximumSize(new Dimension(1870, 50));
                 // size of button
                 btn.setMinimumSize(new Dimension(1870, 50));
-                openNextFile(btn, panel, openNextPath);
+                openNextFile(btn, panel, path);
                 // add button to the panel
                 panel.add(btn);
             }

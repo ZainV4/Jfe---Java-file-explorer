@@ -89,6 +89,45 @@ public class navBar extends JMenuBar {
         });
 
         updatePanelBtn.addActionListener(e -> {
+            myExplorerFrame.panel.removeAll();
+            myExplorerFrame.panel.updateUI();
+            ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+        
+            // myDirectory will be equal to the selected dir / files
+            try {
+                // String ==> File
+                File dir = new File(myDirectory.openNextPath);
+                // It will list all directories in p
+                String contents[] = dir.list();
+                // reset the panel if p is selected
+                myExplorerFrame.panel.removeAll();
+                myExplorerFrame.panel.updateUI();
+                // loops content array
+                for(int i=0; i<contents.length; i++) {
+                    // sets btn name content
+                    JButton btn =  new JButton(contents[i]);
+                    // sets icon 
+                    btn.setIcon(dirIcon);
+                    // align btn text to the left
+                    btn.setHorizontalAlignment(SwingConstants.LEFT);
+                    // sets font
+                    btn.setFont(new Font("Arial", Font.PLAIN, 25));
+                    // removes focus 
+                    btn.setFocusPainted(false);
+                    // size of button
+                    btn.setMaximumSize(new Dimension(1870, 50));
+                    // size of button
+                    btn.setMinimumSize(new Dimension(1870, 50));
+                    myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+                    // add button to the panel
+                    myExplorerFrame.panel.add(btn);
+                }
+            }catch(Exception ex) {
+                // frame for dialog
+                JFrame frame = new JFrame();
+                // dialog which tells the user that the path, he/she is trying to open does not exist
+                JOptionPane.showMessageDialog( frame, "Hmm... I don't think this path exist", "Do you understand?", JOptionPane.OK_OPTION);
+            }
             myExplorerFrame.panel.updateUI();
         });
 
@@ -200,12 +239,12 @@ public class navBar extends JMenuBar {
                         // frame for dialog
                         JFrame create = new JFrame();
                         // dialog which tells the user that the path, he/she is trying to open does not exist
-                        JOptionPane.showMessageDialog(create,"Folder create: "+ myObj.getName(),"Folder dialog" , JOptionPane.OK_OPTION);
+                        JOptionPane.showMessageDialog(create,"Folder create: "+ myObj.getName(),"Folder dialog" , JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         // frame for dialog
                         JFrame create = new JFrame();
                         // dialog which tells the user that the path, he/she is trying to open does exist
-                        JOptionPane.showMessageDialog(create,"Folder already exists "+ myObj.getName(),"Folder dialog" , JOptionPane.OK_OPTION);
+                        JOptionPane.showMessageDialog(create,"Folder already exists "+ myObj.getName(),"Folder dialog" , JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (Exception ex) {
                     // frame for dialog
@@ -220,18 +259,19 @@ public class navBar extends JMenuBar {
                         // frame for dialog
                         JFrame dialog = new JFrame();
                         // dialog which tells the error
-                        JOptionPane.showMessageDialog(dialog, "File create: "+ myObj.getName(), "Folder dialog", JOptionPane.OK_OPTION);
+                        JOptionPane.showMessageDialog(dialog, "File create: "+ myObj.getName(), "Folder dialog", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         // frame for dialog
                         JFrame dialog = new JFrame();
                         // dialog which tells the error
-                        JOptionPane.showMessageDialog(dialog, "Folder already exists: "+ myObj.getName(), "Folder dialog", JOptionPane.OK_OPTION);
+                        JOptionPane.showMessageDialog(dialog, "Folder already exists: "+ myObj.getName(), "Folder dialog", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (Exception ex) {
                     // frame for dialog
                     JFrame dialog = new JFrame();
+                    System.out.print(ex);
                     // dialog which tells the error
-                    JOptionPane.showMessageDialog(dialog, "Do you understand?", "Folder dialog", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(dialog, "OH somthing went wrong", "Folder dialog", JOptionPane.OK_OPTION);
 
                 }
             }
