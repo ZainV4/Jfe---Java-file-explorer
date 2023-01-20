@@ -20,7 +20,8 @@ public class navBar extends JMenuBar {
     static JButton searchBtn;
     static JButton onePathBackwardBtn;
     static JButton onePathForwardtBtn;
-    static JButton sortBtn;
+    static JButton alphabeticalSortBtn;
+    static JButton unalphabeticalSortBtn;
     static JButton createBtn;
     static JButton updatePanelBtn;
     Boolean isFolder = true;
@@ -34,7 +35,8 @@ public class navBar extends JMenuBar {
         ImageIcon leftArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-left-alt-filled-16.png");
         ImageIcon rightArrowIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-arrow-right-alt-filled-16.png");
         ImageIcon searchIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-folder-29-16.png");
-        ImageIcon sortIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-sort-27-16.png");
+        ImageIcon alphabeticalSortIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-sort-14-16.png");
+        ImageIcon unalphabeticalSortIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-sort-16-16.png");
         ImageIcon createIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-text-28-16.png");
         ImageIcon updatePanelIcon = new ImageIcon("Img\\navbarIcons\\iconmonstr-refresh-lined-16.png");
 
@@ -60,8 +62,11 @@ public class navBar extends JMenuBar {
         onePathForwardtBtn = new JButton(rightArrowIcon);
         onePathForwardtBtn.setToolTipText("goes one path forwards");
 
-        sortBtn = new JButton(sortIcon);
-        sortBtn.setToolTipText("opens a new window which shows sort options");
+        alphabeticalSortBtn = new JButton(alphabeticalSortIcon);
+        alphabeticalSortBtn.setToolTipText("sorts all files and folders in a aplhabetical order");
+
+        unalphabeticalSortBtn = new JButton(unalphabeticalSortIcon);
+        unalphabeticalSortBtn.setToolTipText("sorts all files and folders in a unaplhabetical order");
 
         createBtn = new JButton(createIcon);
         createBtn.setToolTipText("opens a new window which shows the create function");
@@ -91,8 +96,13 @@ public class navBar extends JMenuBar {
             createFunction();;
         });
 
-        sortBtn.addActionListener(e -> {
-            sortFunction();
+        alphabeticalSortBtn.addActionListener(e -> {
+            alphabeticalSortFunction();
+
+        });
+
+        unalphabeticalSortBtn.addActionListener(e -> {
+            unalphabeticalSortFunction();
 
         });
 
@@ -144,7 +154,8 @@ public class navBar extends JMenuBar {
         searchBtn.setFocusPainted(false);
         onePathBackwardBtn.setFocusPainted(false);
         onePathForwardtBtn.setFocusPainted(false);
-        sortBtn.setFocusPainted(false);
+        alphabeticalSortBtn.setFocusPainted(false);
+        unalphabeticalSortBtn.setFocusPainted(false);
         createBtn.setFocusPainted(false);
         updatePanelBtn.setFocusPainted(false);
         
@@ -157,7 +168,8 @@ public class navBar extends JMenuBar {
         this.add(t1);
         this.add(onePathBackwardBtn);
         this.add(onePathForwardtBtn);
-        this.add(sortBtn);
+        this.add(alphabeticalSortBtn);
+        this.add(unalphabeticalSortBtn);
         this.add(createBtn);
         this.add(updatePanelBtn);
     }
@@ -166,7 +178,7 @@ public class navBar extends JMenuBar {
      * sorts string array in alphabetical order or ascending order
      * 
      */
-    public void sortFunction() {
+    public void alphabeticalSortFunction() {
         // clears and updates panel
         myExplorerFrame.panel.removeAll();
         myExplorerFrame.panel.updateUI();
@@ -176,6 +188,47 @@ public class navBar extends JMenuBar {
         File dir = new File(myDirectory.openNextPath);
         // It will list all directories in p
         String contents[] = dir.list();
+        Arrays.sort(contents);  
+        // reset the panel if p is selected
+        myExplorerFrame.panel.removeAll();
+        myExplorerFrame.panel.updateUI();
+        // loops content array
+        for(int i=0; i<contents.length; i++) {
+            // sets btn name content
+            JButton btn =  new JButton(contents[i]);
+            // sets icon 
+            btn.setIcon(dirIcon);
+            // align btn text to the left
+            btn.setHorizontalAlignment(SwingConstants.LEFT);
+            // sets font
+            btn.setFont(new Font("Arial", Font.PLAIN, 25));
+            // removes focus 
+            btn.setFocusPainted(false);
+            // size of button
+            btn.setMaximumSize(new Dimension(1870, 50));
+            // size of button
+            btn.setMinimumSize(new Dimension(1870, 50));
+            myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+            // add button to the panel
+            myExplorerFrame.panel.add(btn);
+        }
+    }
+
+    /***
+     * sorts string array in unalphabetical order or ascending order
+     * 
+     */
+    public void unalphabeticalSortFunction() {
+        // clears and updates panel
+        myExplorerFrame.panel.removeAll();
+        myExplorerFrame.panel.updateUI();
+        // icon for buttons
+        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+        // String ==> File
+        File dir = new File(myDirectory.openNextPath);
+        // It will list all directories in p
+        String contents[] = dir.list();
+        Arrays.sort(contents, Collections.reverseOrder());     
         // reset the panel if p is selected
         myExplorerFrame.panel.removeAll();
         myExplorerFrame.panel.updateUI();
