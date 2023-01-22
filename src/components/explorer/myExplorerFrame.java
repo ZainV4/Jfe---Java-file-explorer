@@ -81,9 +81,12 @@ public class myExplorerFrame extends JFrame {
         list.getSelectionModel().addListSelectionListener(e -> {
             // myDirectory will be equal to the selected dir / files
             myDirectory p = list.getSelectedValue();
+            // clear items inside both stacks
             myDirectory.clickedPathsForward.clear();
             myDirectory.clickedPathsForward.clear();
+            // insert root directory by onclick
             myDirectory.clickedPathsBackward.push(p.toString());
+            // assign new value to openNextPath
             myDirectory.openNextPath = p.toString();
             // It will list all directories in p
             String contents[] = p.getFile().list();

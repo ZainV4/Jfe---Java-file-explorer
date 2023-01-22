@@ -3,30 +3,30 @@ import java.awt.ComponentOrientation;
 import java.io.File;
 import java.text.Collator;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale.Category;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;  
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
-import java.awt.FlowLayout;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
-import java.util.*;   
 // class navBar extends JMenuBar which makes it abel for me to use this keyWord instant of 
 // JMenuBar navbar = new JMenuBar() == navbar extends JMenuBar
 public class navBar extends JMenuBar {
+    // starts search function (btn)
     static JButton searchBtn;
+    // goes one path backward (btn)
     static JButton onePathBackwardBtn;
+    // goes one path forward (btn)
     static JButton onePathForwardtBtn;
+    // sorts items alphabetical (btn)
     static JButton alphabeticalSortBtn;
+    // sorts items unalphabetical (btn)
     static JButton unalphabeticalSortBtn;
+    // opens create frame (btn)
     static JButton createBtn;
+    // refreshs content (btn)
     static JButton updatePanelBtn;
+    // checks if directory is a folder
     Boolean isFolder = true;
     /*
      * This function will display a navigation bar on top of the Explorer frame
@@ -423,60 +423,67 @@ public class navBar extends JMenuBar {
 
     public static void backwardsFunction() {
         try {
-        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
-        if(myDirectory.clickedPathsBackward.size() <= 1 ) {
-            //Enables back and font btns if panel btn is clicked
-            navBar.onePathBackwardBtn.setEnabled(false);
-            navBar.onePathForwardtBtn.setEnabled(true);
+            // icon for directory
+            ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+            // if only one item left disable/enabled buttons
+            if(myDirectory.clickedPathsBackward.size() <= 1 ) {
+                //Enables back and font btns if panel btn is clicked
+                navBar.onePathBackwardBtn.setEnabled(false);
+                navBar.onePathForwardtBtn.setEnabled(true);
+            }
+            System.out.println(myDirectory.openNextPath);
+            myDirectory.clickedPathsForward.push(myDirectory.openNextPath);
+            myDirectory.clickedPathsBackward.pop();
+            myDirectory.openNextPath = myDirectory.clickedPathsBackward.lastElement();
+            // String ==> File
+            File dir = new File(myDirectory.openNextPath);
+            // It will list all directories in p
+            String contents[] = dir.list();
+            // reset the panel if p is selected
+            myExplorerFrame.panel.removeAll();
+            myExplorerFrame.panel.updateUI();
+            // loops content array
+            for(int i=0; i<contents.length; i++) {
+                // sets btn name content
+                JButton btn =  new JButton(contents[i]);
+                // sets icon 
+                btn.setIcon(dirIcon);
+                // align btn text to the left
+                btn.setHorizontalAlignment(SwingConstants.LEFT);
+                // sets font
+                btn.setFont(new Font("Arial", Font.PLAIN, 25));
+                // removes focus 
+                btn.setFocusPainted(false);
+                // size of button
+                btn.setMaximumSize(new Dimension(1870, 50));
+                // size of button
+                btn.setMinimumSize(new Dimension(1870, 50));
+                myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+                // add button to the panel
+                myExplorerFrame.panel.add(btn);
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
         }
-        System.out.println(myDirectory.openNextPath);
-        myDirectory.clickedPathsForward.push(myDirectory.openNextPath);
-        myDirectory.clickedPathsBackward.pop();
-        myDirectory.openNextPath = myDirectory.clickedPathsBackward.lastElement();
-        // String ==> File
-        File dir = new File(myDirectory.openNextPath);
-        // It will list all directories in p
-        String contents[] = dir.list();
-        // reset the panel if p is selected
-        myExplorerFrame.panel.removeAll();
-        myExplorerFrame.panel.updateUI();
-        // loops content array
-        for(int i=0; i<contents.length; i++) {
-            // sets btn name content
-            JButton btn =  new JButton(contents[i]);
-            // sets icon 
-            btn.setIcon(dirIcon);
-            // align btn text to the left
-            btn.setHorizontalAlignment(SwingConstants.LEFT);
-            // sets font
-            btn.setFont(new Font("Arial", Font.PLAIN, 25));
-            // removes focus 
-            btn.setFocusPainted(false);
-            // size of button
-            btn.setMaximumSize(new Dimension(1870, 50));
-            // size of button
-            btn.setMinimumSize(new Dimension(1870, 50));
-            myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
-            // add button to the panel
-            myExplorerFrame.panel.add(btn);
-        }
-    } catch (Exception ex) {
-
-    }
     }
 
     public static void forwardsFunction() {
-
+        // prints last element inside console
         System.out.println(myDirectory.clickedPathsForward.lastElement());
         try {
+            // icon for directory
             ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+            // if only one item left disable/enabled buttons
             if(myDirectory.clickedPathsForward.size() <= 1 ) {
                 //Enables back and font btns if panel btn is clicked
                 navBar.onePathBackwardBtn.setEnabled(true);
                 navBar.onePathForwardtBtn.setEnabled(false);
             }
+            // insert new item inside clickedPathBackward
             myDirectory.clickedPathsBackward.push(myDirectory.openNextPath);
+            // remove last element form stack
             myDirectory.clickedPathsForward.pop();
+            // assigns last element to the variable openNextPath
             myDirectory.openNextPath = myDirectory.clickedPathsForward.lastElement();
             // String ==> File
             File dir = new File(myDirectory.openNextPath);
