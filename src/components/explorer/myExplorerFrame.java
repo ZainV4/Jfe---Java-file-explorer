@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Stack;
 import java.awt.*;
 
 // class myFrame extends JFrame which makes it abel for me to use this keyWord instant of JFrame
@@ -80,6 +81,9 @@ public class myExplorerFrame extends JFrame {
         list.getSelectionModel().addListSelectionListener(e -> {
             // myDirectory will be equal to the selected dir / files
             myDirectory p = list.getSelectedValue();
+            myDirectory.clickedPathsForward.clear();
+            myDirectory.clickedPathsForward.clear();
+            myDirectory.clickedPathsBackward.push(p.toString());
             myDirectory.openNextPath = p.toString();
             // It will list all directories in p
             String contents[] = p.getFile().list();
@@ -158,9 +162,9 @@ class  myDirectory {
     static JButton btn;
     //
     static String openNextPath;
-    //
-    static String pathLol;
-
+    // Stack that contains all onlicked paths
+    static Stack<String> clickedPathsBackward = new Stack<String>();
+    static Stack<String> clickedPathsForward = new Stack<String>();
     /***
      * The file in the class is = to the parametter
      * {constructor}
@@ -211,6 +215,9 @@ class  myDirectory {
                     // The path
                     // onlick on btn update openNextPath
                     openNextPath = p+ "\\" + ((JButton) e.getSource()).getText();
+                    //
+                    clickedPathsBackward.push(openNextPath);
+                    
                     //  String ==> File
                     File directoryPath = new File(openNextPath);
                     if(directoryPath.isDirectory()) {
@@ -302,119 +309,6 @@ class  myDirectory {
         }
     
     }
-    /***
-     * takes care of the one-path-back function (does go one one time back to the past directory by each click)
-     * @param panel
-     * @param path
-     */
-    public static void OnePathToBackBtnFuntion(JPanel panel, String path) {
-        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
-
-        try {
-            // onlick on btn update openNextPath
-            openNextPath = path;
-            //StringBuffer (basiclly String which can be modified)
-            StringBuffer sb= new StringBuffer(openNextPath);  
-            // loop with does go less(path.length) by 1 each run
-            for(int i = path.length()-1; i>0; i--) {
-                // checks if path is really a Directory
-                if (new File(path).isDirectory()) { 
-                    // if path length is three or less, enable back-btn
-                    if(!(path.length() <= 3)) {
-                        // if path doesn't contain '\' remove last character
-                        if(!(path.charAt(i) == '\\')) { 
-                            // deletes last character
-                            sb.deleteCharAt(sb.length()-1); 
-                        } else {
-                            // deletes last character
-                            sb.deleteCharAt(sb.length()-1); 
-                            break;
-                        }
-                    } else {
-                        // disables btn if path length is less then or three
-                        navBar.onePathBackwardBtn.setEnabled(false);
-                    }
-                } else {
-                    // disables btn if path does not exist
-                    navBar.onePathForwardtBtn.setEnabled(false);
-                    break;
-                }
-            }
-            // assigned sb as string to openNextPath
-            openNextPath = sb.toString();
-            // String ==> file
-            File dir = new File(openNextPath);
-            // It will list all directories in p
-            String contents[] = dir.list();
-            // reset the panel if p is selected
-            panel.removeAll();
-            panel.updateUI();
-            // loops content array
-            for(int i=0; i<contents.length; i++) {
-                // sets btn name content
-                JButton btn =  new JButton(contents[i]);
-                // sets icon 
-                btn.setIcon(dirIcon);
-                // align btn text to the left
-                btn.setHorizontalAlignment(SwingConstants.LEFT);
-                // sets font
-                btn.setFont(new Font("Arial", Font.PLAIN, 25));
-                // removes focus 
-                btn.setFocusPainted(false);
-                // size of button
-                btn.setMaximumSize(new Dimension(1870, 50));
-                // size of button
-                btn.setMinimumSize(new Dimension(1870, 50));
-                openNextFile(btn, panel, openNextPath);
-                // add button to the panel
-                panel.add(btn);
-            }
-        }catch(Exception e) {
-            // disables back-btn if path does not exist
-            navBar.onePathBackwardBtn.setEnabled(false);
-            JFrame frame = new JFrame();
-            // write your code here
-            JOptionPane.showMessageDialog( frame, e, 
-            "Do you understand?", JOptionPane.OK_OPTION);
-
-        }
-
-    }
-/* 
-    public static void OnePathToFrontBtnFuntion(JPanel panel, String thePath) {
-        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
-
-        try {
-            System.out.println(thePath);  
-
-            File dir = new File(thePath);
-            // It will list all directories in p
-            String contents[] = dir.list();
-            // reset the panel if p is selected
-            panel.removeAll();
-            panel.updateUI();
-            // loops content array
-            for(int i=0; i<contents.length; i++) {
-                btn =  new JButton(contents[i]);
-                btn.setFocusPainted(false);
-                btn.setMaximumSize(new Dimension(1870, 50));
-                btn.setMinimumSize(new Dimension(1870, 50));
-                btn.setIcon(dirIcon);
-                btn.setHorizontalAlignment(SwingConstants.LEFT);
-                btn.setFont(new Font("Arial", Font.PLAIN, 25));
-                // calls openNextFile();
-                openNextFile(btn, panel, thePath);
-                // btn will be added to the panel   
-                panel.add(btn);
-            }
-        }catch(Exception e) {
-            JFrame frame = new JFrame();
-            // write your code here
-            JOptionPane.showMessageDialog( frame, "Hmm... I don't think this path exist", 
-            "Do you understand?", JOptionPane.OK_OPTION);
-        }
-    }
-    */
 }
 
 

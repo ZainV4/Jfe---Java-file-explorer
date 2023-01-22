@@ -1,9 +1,11 @@
 package components.explorer;
 import java.awt.ComponentOrientation;
 import java.io.File;
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale.Category;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,6 +16,7 @@ import javax.swing.JComboBox;
 import java.awt.FlowLayout;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.*;   
 // class navBar extends JMenuBar which makes it abel for me to use this keyWord instant of 
 // JMenuBar navbar = new JMenuBar() == navbar extends JMenuBar
 public class navBar extends JMenuBar {
@@ -75,37 +78,35 @@ public class navBar extends JMenuBar {
         updatePanelBtn.setToolTipText("updates the panel which shows the content of directory");
 
 
-        // Search bar and Search btn (ActionListener)
+        // Search bar and Search button (ActionListener)
         searchBtn.addActionListener(e -> {
             myDirectory.searchBarFunction(t1.getText(), myExplorerFrame.panel);
             onePathForwardtBtn.setEnabled(false);
             onePathBackwardBtn.setEnabled(false);
         });
-
-        // One path back btn (ActionListener)
+        // One path backward button (ActionListener)
         onePathBackwardBtn.addActionListener(e -> {
-            myDirectory.OnePathToBackBtnFuntion(myExplorerFrame.panel, myDirectory.openNextPath);
+            backwardsFunction();
         });
-
-        // NOT COMPLETE (ActionListener)
+        // one path forward button (ActionListener)
         onePathForwardtBtn.addActionListener(e -> {
-            //myDirectory.OnePathToFrontBtnFuntion(myExplorerFrame.panel, myDirectory.pathLol);
+            forwardsFunction();
         });
-
+        // creating file or folder button (ActionListener)
         createBtn.addActionListener(e -> {
             createFunction();;
         });
-
+        // sort content alphabetically (ActionListener)
         alphabeticalSortBtn.addActionListener(e -> {
             alphabeticalSortFunction();
 
         });
-
+        // sort content unalphabetically (ActionListener)
         unalphabeticalSortBtn.addActionListener(e -> {
             unalphabeticalSortFunction();
 
         });
-
+        // update content inside panel button (ActionListener)
         updatePanelBtn.addActionListener(e -> {
             myExplorerFrame.panel.removeAll();
             myExplorerFrame.panel.updateUI();
@@ -187,8 +188,8 @@ public class navBar extends JMenuBar {
         // String ==> File
         File dir = new File(myDirectory.openNextPath);
         // It will list all directories in p
-        String contents[] = dir.list();
-        Arrays.sort(contents);  
+        String contents[] = dir.list();  
+        Arrays.sort(contents, Collator.getInstance());  
         // reset the panel if p is selected
         myExplorerFrame.panel.removeAll();
         myExplorerFrame.panel.updateUI();
@@ -228,7 +229,7 @@ public class navBar extends JMenuBar {
         File dir = new File(myDirectory.openNextPath);
         // It will list all directories in p
         String contents[] = dir.list();
-        Arrays.sort(contents, Collections.reverseOrder());     
+        Arrays.sort(contents, Collator.getInstance().reversed());     
         // reset the panel if p is selected
         myExplorerFrame.panel.removeAll();
         myExplorerFrame.panel.updateUI();
@@ -314,7 +315,7 @@ public class navBar extends JMenuBar {
 
         // option box with {Folder, File}
         JComboBox<String> optionsBox = new JComboBox<String>(Options);
-
+        // checks option
         optionsBox.addActionListener(event -> {
             if (optionsBox.getSelectedItem().equals("Folder")) {
                 isFolder = true;
@@ -322,14 +323,17 @@ public class navBar extends JMenuBar {
                 isFolder = false;
             }
         });
+        // sets font for optionBox content
         optionsBox.setFont(new Font("Anton", Font.BOLD, 20));
 
         // panel with contains create and cancel buttens
         JPanel buttons = new JPanel(new GridBagLayout());
-        // Cancel & Create button [and font & 17]
-        JButton createBtn = new JButton("CREATE");
-        createBtn.setFont(new Font("Anton", Font.BOLD, 17));
-        createBtn.addActionListener(e -> {
+        // Create button 
+        JButton createFolderOrFileBtn = new JButton("CREATE");
+        // sets font for createBtn 
+        createFolderOrFileBtn.setFont(new Font("Anton", Font.BOLD, 17));
+
+        createFolderOrFileBtn.addActionListener(e -> {
             if(isFolder == true) {
                 try {
                     File myObj = new File(myDirectory.openNextPath+"\\"+newDirectoryField.getText());
@@ -375,19 +379,22 @@ public class navBar extends JMenuBar {
             }
             frame.dispose();
         });
-        JButton cancelBtn = new JButton("CANCEL");
-        cancelBtn.addActionListener(e -> {
+        // cancel button for Create-frame button
+        JButton cancelFolderOrFileBtn = new JButton("CANCEL");
+        // cancelFolderOrFileBtn (ActionListener)
+        cancelFolderOrFileBtn.addActionListener(e -> {
             frame.dispose();
         });
-        cancelBtn.setFont(new Font("Anton", Font.BOLD, 17));
+        // sets font for cancelFolderOrFileBtn
+        cancelFolderOrFileBtn.setFont(new Font("Anton", Font.BOLD, 17));
 
         // remove Paint focus around the button
-        createBtn.setFocusPainted(false);
-        cancelBtn.setFocusPainted(false);
+        createFolderOrFileBtn.setFocusPainted(false);
+        cancelFolderOrFileBtn.setFocusPainted(false);
 
         // adding everything togehter
-        buttons.add(createBtn);
-        buttons.add(cancelBtn);
+        buttons.add(createFolderOrFileBtn);
+        buttons.add(cancelFolderOrFileBtn);
 
 
         CreatePanel.setBorder(BorderFactory.createTitledBorder("Let's Create"));
@@ -412,5 +419,96 @@ public class navBar extends JMenuBar {
         frame.setLocationRelativeTo(null);  
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);  
+    }
+
+    public static void backwardsFunction() {
+        try {
+        ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+        if(myDirectory.clickedPathsBackward.size() <= 1 ) {
+            //Enables back and font btns if panel btn is clicked
+            navBar.onePathBackwardBtn.setEnabled(false);
+            navBar.onePathForwardtBtn.setEnabled(true);
+        }
+        System.out.println(myDirectory.openNextPath);
+        myDirectory.clickedPathsForward.push(myDirectory.openNextPath);
+        myDirectory.clickedPathsBackward.pop();
+        myDirectory.openNextPath = myDirectory.clickedPathsBackward.lastElement();
+        // String ==> File
+        File dir = new File(myDirectory.openNextPath);
+        // It will list all directories in p
+        String contents[] = dir.list();
+        // reset the panel if p is selected
+        myExplorerFrame.panel.removeAll();
+        myExplorerFrame.panel.updateUI();
+        // loops content array
+        for(int i=0; i<contents.length; i++) {
+            // sets btn name content
+            JButton btn =  new JButton(contents[i]);
+            // sets icon 
+            btn.setIcon(dirIcon);
+            // align btn text to the left
+            btn.setHorizontalAlignment(SwingConstants.LEFT);
+            // sets font
+            btn.setFont(new Font("Arial", Font.PLAIN, 25));
+            // removes focus 
+            btn.setFocusPainted(false);
+            // size of button
+            btn.setMaximumSize(new Dimension(1870, 50));
+            // size of button
+            btn.setMinimumSize(new Dimension(1870, 50));
+            myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+            // add button to the panel
+            myExplorerFrame.panel.add(btn);
+        }
+    } catch (Exception ex) {
+
+    }
+    }
+
+    public static void forwardsFunction() {
+
+        System.out.println(myDirectory.clickedPathsForward.lastElement());
+        try {
+            ImageIcon dirIcon = new ImageIcon("Img\\explorerIcons\\iconmonstr-folder-20-16.png");
+            if(myDirectory.clickedPathsForward.size() <= 1 ) {
+                //Enables back and font btns if panel btn is clicked
+                navBar.onePathBackwardBtn.setEnabled(true);
+                navBar.onePathForwardtBtn.setEnabled(false);
+            }
+            myDirectory.clickedPathsBackward.push(myDirectory.openNextPath);
+            myDirectory.clickedPathsForward.pop();
+            myDirectory.openNextPath = myDirectory.clickedPathsForward.lastElement();
+            // String ==> File
+            File dir = new File(myDirectory.openNextPath);
+            // It will list all directories in p
+            String contents[] = dir.list();
+            // reset the panel if p is selected
+            myExplorerFrame.panel.removeAll();
+            myExplorerFrame.panel.updateUI();
+            // loops content array
+            for(int i=0; i<contents.length; i++) {
+                // sets btn name content
+                JButton btn =  new JButton(contents[i]);
+                // sets icon 
+                btn.setIcon(dirIcon);
+                // align btn text to the left
+                btn.setHorizontalAlignment(SwingConstants.LEFT);
+                // sets font
+                btn.setFont(new Font("Arial", Font.PLAIN, 25));
+                // removes focus 
+                btn.setFocusPainted(false);
+                // size of button
+                btn.setMaximumSize(new Dimension(1870, 50));
+                // size of button
+                btn.setMinimumSize(new Dimension(1870, 50));
+                myDirectory.openNextFile(btn, myExplorerFrame.panel, myDirectory.openNextPath);
+                // add button to the panel
+                myExplorerFrame.panel.add(btn);
+                
+            }
+        } catch (Exception ex) {
+    
+        }
+        
     }
 }
