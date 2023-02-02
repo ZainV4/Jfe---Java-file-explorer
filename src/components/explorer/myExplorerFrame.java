@@ -119,10 +119,14 @@ public class myExplorerFrame extends JFrame {
         splitPane.setLeftComponent(new JScrollPane(list));
 
         // location of the divider
-        splitPane.setDividerLocation(220);
+        splitPane.setDividerLocation(190);
 
-        // Jscrollpanel to panel
-        JScrollPane scrollPane = new JScrollPane(panel);
+        // calling the class which is for creating the tabs
+        JTabbedPane tp = new JTabbedPane();
+
+        // Jscrollpanel to panel && does add the first tab
+        tp.add("Directory names",panel);
+        JScrollPane scrollPane = new JScrollPane(tp);
 
         // horizontal scroll bar only if needed 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
